@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8" />
+	    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+		<title>工业互联网平台运行监测-详情</title>
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/detail.css" />
+	</head>
+	
+	<body class="bg01">
+	<div id="app">
+
+		<header class="header">
+			<h3>工业互联网平台运行监测</h3>
+			<span>{{dateStr}}</span>
+		</header>
+		<div class="goback" @click="goBack()">返回</div>
+<!--		<div class="menus">-->
+<!--			<button class="my-btn" @click="test(true)">平台模型指标</button>-->
+<!--			<button class="my-btn" @click="test(false)">开发应用指标</button>-->
+<!--		</div>-->
+		<div class="wrapper">
+			<div class="container-fluid">
+				<page03 v-if="flag"></page03>
+				<services-page v-if="!flag"></services-page>
+			</div>
+		</div>
+	</div>
+
+
+		<script type="text/javascript" src="js/remUtil.js"></script>
+		<script type="text/javascript" src="js/vue.js"></script>
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="js/echarts-3.8.5.min.js"></script>
+		<script type="text/javascript" src="js/echarts-map-world.js"></script>
+		<script type="text/javascript" src="js/echarts-map-china.js"></script>
+	<script>
+		// 定义了全局变量，用于存放组件
+		var components = {};
+		// 封装了此方法，同步的请求了 .html 文件的内容，注意：不能使用异步请求
+		function load(a){
+			for(var i=0;i<a.length;a++){
+				$.ajax({
+					url: a[i],
+					async: false,
+					success: function(res){
+						// 在body下插入获取到 .html 文件的内容，浏览器会自动解析html标签
+						$('body').append(res);
+					}
+				})
+			}
+		}
+		// 此封装的核心价值为按需加载，我不会一开始将所有组件都加载进来，但是加载进来的组件，我们就可以不用进行加载
+		// 具体的判断方式，判断 components 的全局变量，如果有这个组件，就可以不调用这个方法
+		load(['./page03.html'])
+		load(['./servicesPage.html'])
+		new Vue({
+			el: '#app', // 这个是主组件，也是父组件
+			data: function(){
+				return {
+					flag:true,
+					dateStr: ''
+				}
+			},
+			components: {
+				// 如果组件的名称为驼峰式命名法，组件名称要用 - 隔开 如 tabList 标签名为 <tab-list>
+				// 'parent':components.parents, // 子组件
+				// 'app1':components.app1, // 子组件
+				// 'page01':components.page01,
+				'page03':components.page03,
+				'servicesPage':components.servicesPage
+			},
+			mounted () {
+				let params = this.getParams();
+				console.log(params, 'params')
+				if (params.pid==1){
+					this.flag = false;
+				}
+				this.getLocalTime()
+			},
+			methods:{
+				getParams(){
+					let href = decodeURI(window.location.href);
+					let query = href.substring(href.indexOf('?')+1);
+					let vars = query.split("&");
+					let obj = {}
+					for (var i = 0; i < vars.length; i++) {
+						let pair = vars[i].split("=");
+						obj[pair[0]] = pair[1]
+					}
+					return obj;
+				},
+				goBack:function (){
+					let params = this.getParams();
+					window.location.href = "/index.html?flag="+params.flag
+					// history.go(-1);
+				},
+				test:function (flag){
+					this.flag=flag
+				},
+				getLocalTime() {
+					var date = new Date();
+					var year = date.getFullYear();
+					var month = date.getMonth() + 1;
+					var day = date.getDate();
+					console.log(year, month, day)
+					this.dateStr = year + '年' + month + '月' + day + '日'
+				}
+			}
+		})
+	</script>
+	</body>
+</html>

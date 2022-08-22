@@ -1,0 +1,83 @@
+<style type="text/css">
+    .a{
+        color: red;
+    }
+    .fill-h {height:100%;min-height:100%;}
+</style>
+<!-- 推荐使用此方式 如果使用 template 标签会报错 -->
+<script type="text/template" id="com1">
+<!--    <div class="a"> {{a}}-->
+<div class="fill-h" id="worldMap"></div>
+<!--    </div>-->
+
+    <!-- 这里面就可以使用 vue 的方式 -->
+</script>
+<script>
+    // 在主文件的 components 变量中赋值给 parents 属性，是为了按需加载及防止2次加载
+    components.app1 = Vue.extend({ // Vue.extend 的方式最好，Vue.components 的方式也是会报错
+        template: '#com1', // 此 id 对象 script模版的 id
+        data: function(){  // 此后面的写法跟vue组件的写法一模一样，
+            return {
+                a: '啊啊啊',
+                worldMap:undefined,
+
+            }
+        },
+        methods:{
+            initEcharts:function (){
+                /******************* 世界地图 ******************/
+
+                const worldMapOpt = {
+                    geo: {
+                        map: 'world',
+                        roam: false, //开启鼠标缩放和漫游
+                        zoom: 1, //地图缩放级别
+                        selectedMode: false, //选中模式：single | multiple
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        layoutCenter: ['50%', '50%'], //设置后left/right/top/bottom等属性无效
+                        layoutSize: '100%',
+                        label: {
+                            emphasis: {
+                                show: false
+                            }
+                        },
+                        itemStyle: {
+                            normal: {
+                                areaColor: '#101f32',
+                                borderWidth: 1.1,
+                                borderColor: '#43d0d6'
+                            },
+                            emphasis: {
+                                areaColor: '#069'
+                            }
+                        }
+                    }
+                };
+                // worldMap.setOption(worldMapOpt);
+                return  worldMapOpt;
+                //渲染报表
+                // flyMap.setOption(flyMapOpt);
+            }
+        },
+        mounted(){
+            // var that=this;
+            //初始化echarts实例
+            const el=document.getElementById("worldMap")
+            let worldMap = null;
+            if(el!=null){
+                worldMap = echarts.init(el);
+                const worldMapOpt =this.initEcharts();
+                worldMap.setOption(worldMapOpt);
+            }
+            window.addEventListener('resize',function(){
+                if(worldMap._dom.offsetHeight>0){
+                    worldMap.resize();
+                }
+
+            })
+        }
+    })
+</script>

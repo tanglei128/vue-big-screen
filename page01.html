@@ -1,0 +1,1011 @@
+<style type="text/css">
+    .a{
+        color: red;
+    }
+    .fill-h {height:100%;min-height:100%;color: white !important;}
+    .xpanel-wrapper-line1 {height:35%;}
+    .xpanel-wrapper-line2 {height:20%;}
+    .xpanel-wrapper-line3 {height:45%;}
+    .xpanel-wrapper {padding-bottom:15px;box-sizing:border-box;}
+    .xpanel-wrapper-1 {height:100%;}
+    .xpanel-wrapper-2 {height:50%;}
+    .xpanel-wrapper-3 {height:33.33333%;}
+    .xpanel {
+        padding:15px;
+        height:100%;
+        min-height:120px;
+        /*background:url("../img/panel.png") center no-repeat;*/
+        /*background-size:100% 100%;*/
+        /*box-sizing:border-box;*/
+    }
+    .xpanelx {
+        padding:15px;
+        height:100%;
+        min-height:170px;
+        /*border: 1px solid rgba(64,198,255,0.2510);*/
+        /*background:url("../img/panel.png") center no-repeat;*/
+        /*background-size:100% 100%;*/
+        box-sizing:border-box;
+        border-radius: 6px;
+    }
+    .title-box span{
+        font-size: 18px;
+        color: #ffffff;
+        margin-left: 37px;
+    }
+    .title-box img{
+        width: 100%;
+        margin-top: -5px;
+    }
+    .title-box{
+        /*background: rebeccapurple;*/
+    }
+    .chart-box{
+        /*background: #2b542c;*/
+       display: flex;
+       flex-direction: column;
+    }
+    .count-panel{
+        height: 20%;
+/*background: #2e6da4;*/
+    }
+    .histogram-panel{
+/*background: #0f1c30;*/
+        height: 33%;
+    }
+    .donut-panel{
+/*background: #8a6d3b;*/
+        height: 33%;
+    }
+    .reader-panel{
+        /*background: red;*/
+        height: 14%;
+    }
+    .count-content{
+        padding: 0px !important;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .count-content-num{
+        font-size: 20px !important;
+        color: #40C6FF;
+    }
+    .count-content-num a{
+        color: #40C6FF;
+    }
+    .count-content-name{
+        font-size: 14px !important;
+        color: #ffffff;
+    }
+    .unit{
+        font-size: 14px;
+        color: #40C6FF;
+    }
+    .china-map-title{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: #fff;
+        font-size: 22px;
+        text-align: center;
+    }
+
+</style>
+<script src="./js/request.js"></script>
+<script src="./js/utils.js"></script>
+<!-- 推荐使用此方式 如果使用 template 标签会报错 -->
+<script type="text/template" id="com00">
+<!--    <div class="a"> {{a}}-->
+<div class="row fill-h">
+    <div class="col-lg-3 fill-h">
+        <div class="xpanel-wrapper xpanel-wrapper-1">
+            <div class="xpanel">
+                 <div class="title-box">
+                     <span>工业APP</span>
+                     <img src="./img/header_bar.png" alt="">
+                 </div>
+                 <div class="chart-box" style="height: 92%;">
+                     <div class="count-panel">
+                        <div class="count-1 xpanel-wrapper-2">
+                            <div class="col-lg-12 xpanel-wrapper-1 count-content" >
+                                <div class="count-content-num" style="font-size: 28px">
+                                    <a href="./detail.html?flag=true&dataType=1">
+<!--                                        {{countObj.appcount|formatNum}}-->
+                                        <span id="appcount"></span>
+                                    </a>
+                                    <span class="unit">个</span>
+                                </div>
+                                <div class="count-content-name" style="font-size: 18px">工业APP数</div>
+                            </div>
+                        </div>
+                         <div class="count-2 xpanel-wrapper-2">
+                             <div class="col-lg-6 xpanel-wrapper-1 count-content">
+                                 <div class="count-content-num" style="font-size: 28px">
+                                     <a href="./detail.html?flag=true&dataType=2">
+<!--                                         {{countObj.platformappcount|formatNum}}-->
+                                         <span id="platformappcount"></span>
+                                     </a>
+                                     <span class="unit">个</span>
+                                 </div>
+                                 <div class="count-content-name" style="font-size: 16px">基于平台开发APP数</div>
+                             </div>
+                             <div class="col-lg-6 xpanel-wrapper-1 count-content">
+                                 <div class="count-content-num" style="font-size: 28px">
+                                     <a href="./detail.html?flag=true&dataType=3">
+<!--                                         {{countObj.cloudappcount|formatNum}}-->
+                                         <span id="cloudappcount"></span>
+                                     </a>
+                                     <span class="unit">个</span>
+                                 </div>
+                                 <div class="count-content-name" style="font-size: 16px">传统软件云化APP数</div>
+                             </div>
+                         </div>
+                     </div>
+                     <div class="histogram-panel">
+                         <div class="fill-h" id="histogram"></div>
+                     </div>
+                     <div class="donut-panel">
+                         <div class="fill-h" id="donut"></div>
+                     </div>
+                     <div class="reader-panel">
+                         <div class="count-2 xpanel-wrapper-1">
+                             <div class="col-lg-6 xpanel-wrapper-1 count-content">
+                                 <div class="count-content-num" style="font-size: 28px">
+                                     <a href="./detail.html?flag=true&dataType=4">
+<!--                                         {{countObj.subscribecount|formatNum}}-->
+                                         <span id="subscribecount"></span>
+                                     </a>
+                                     <span class="unit">次</span>
+                                 </div>
+                                 <div class="count-content-name" style="font-size: 16px">订阅总量</div>
+                             </div>
+                             <div class="col-lg-6 xpanel-wrapper-1 count-content">
+                                 <div class="count-content-num" style="font-size: 28px">
+                                     <a href="./detail.html?flag=true&dataType=5">
+<!--                                         {{countObj.keyappcount|formatNum}}-->
+                                         <span id="keyappcount"></span>
+                                     </a>
+                                     <span class="unit">个</span>
+                                 </div>
+                                 <div class="count-content-name" style="font-size: 16px">杀手锏APP订阅量</div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 fill-h">
+        <div class="xpanel-wrapper xpanel-wrapper-1">
+            <div class="xpanelx">
+                <div class="china-map-title" style="height: 10%">
+                    <div>区域服务企业 — 中国</div>
+                </div>
+                <div style="height: 90%">
+                    <div class="fill-h" id="chinaMap"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 fill-h">
+        <div class="xpanel-wrapper xpanel-wrapper-line1">
+            <div class="xpanel">
+                <div class="title-box" style="height: 20%">
+                    <span>开发者用户</span>
+                    <img src="./img/header_bar.png" alt="">
+                </div>
+                <div style="height: 80%">
+                    <div class="fill-h" id="lineChart"></div>
+
+                </div>
+            </div>
+        </div>
+        <div class="xpanel-wrapper xpanel-wrapper-line2">
+            <div class="xpanel">
+                <div class="title-box" style="height: 40%">
+                    <span>注册用户</span>
+                    <img src="./img/header_bar.png" alt="">
+                </div>
+                <div style="height: 60%">
+                    <div class="col-lg-12 xpanel-wrapper-1 count-content">
+                        <div class="count-content-num" style="font-size: 28px">
+
+                            <a href="./detail.html?flag=true&dataType=6">
+                                <!--                                         {{countObj.registercount|formatNum}}-->
+                                <span id="registercount"></span>
+                            </a>
+                            <span class="unit">个</span>
+                        </div>
+                        <div class="count-content-name" style="font-size: 16px">注册用户数</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="xpanel-wrapper xpanel-wrapper-line3">
+            <div class="xpanel">
+                <div class="title-box" style="height: 15%">
+                    <span>服务企业</span>
+                    <img src="./img/header_bar.png" alt="">
+                </div>
+                <div class="chart-box" style="height: 85%">
+                    <div style="height: 25%">
+                        <div class="col-lg-12 xpanel-wrapper-1 count-content">
+                            <div class="count-content-num" style="font-size: 28px">
+                                <a href="./detail.html?flag=true&dataType=7">
+<!--                                    {{countObj.companycount|formatNum}}-->
+                                    <span id="companycount"></span>
+                                </a>
+                                <span class="unit">家</span>
+                            </div>
+                            <div class="count-content-name" style="font-size: 16px">服务企业数</div>
+                        </div>
+                    </div>
+                    <div style="height: 75%">
+                        <div class="fill-h" id="histogram2"></div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--    </div>-->
+
+    <!-- 这里面就可以使用 vue 的方式 -->
+</script>
+<script>
+    // 在主文件的 components 变量中赋值给 parents 属性，是为了按需加载及防止2次加载
+    components.page01 = Vue.extend({ // Vue.extend 的方式最好，Vue.components 的方式也是会报错
+        template: '#com00', // 此 id 对象 script模版的 id
+        data: function(){  // 此后面的写法跟vue组件的写法一模一样，
+            return {
+                platformName:'',
+                a: '啊啊啊',
+                histogram:undefined,
+                countObj:{
+                    "appcount": 0,
+                    "platformappcount": 0,
+                    "cloudappcount": 0,
+                    "subscribecount": 0,
+                    "keyappcount": 0,
+                    "registercount": 0,
+                    "companycount": 0
+                }
+
+            }
+        },
+        filters:{
+            formatNum(num){
+                let reg=/\d{1,3}(?=(\d{3})+$)/g;
+                return (num + '').replace(reg, '$&,');
+            }
+        },
+        methods:{
+            histogramApi(echartsEl,num){
+                let url ="";
+                if (num==1){
+                    url="/api/monitor/getCategoryAppCount";
+                }else{
+                    url="/api/monitor/getAppServeCompanyCount";
+                }
+                var platformName = localStorage.getItem('platformName');
+                ajax(url,'get', {platformName: this.platformName}, (res) => {
+                    if (res.code === 1) {
+                        var data = res.data;
+                        var optKeys = [];
+                        var optValues= [];
+                        data.map(item => {
+                            optKeys.push(num==1?item.categoryname:item.industryname);
+                            optValues.push(num==1?item.appcount:item.companycount);
+                        })
+                        this.initEcharts(optKeys,optValues,echartsEl,num);
+                    }
+                })
+            },
+            lineApi(echartsEl){
+                var platformName = localStorage.getItem('platformName');
+                ajax('/api/monitor/getDevelops','get', {platformName: this.platformName}, (res) => {
+                    if (res.code === 1) {
+                        var data = res.data;
+                        var optKeys = [];
+                        var optValues1= [];
+                        var optValues2= [];
+                        data.map(item => {
+                            optKeys.push(item.date);
+                            optValues1.push(item.developscount)
+                            optValues2.push(item.dailyaccount)
+                        })
+                        this.initLineEcharts(optKeys,optValues1,optValues2,echartsEl);
+                    }
+                })
+            },
+            donutApi(echartsEl){
+                var platformName = localStorage.getItem('platformName');
+                ajax('/api/monitor/getServiceAppCount','get', {platformName: this.platformName}, (res) => {
+                    if (res.code === 1) {
+                        var data = res.data;
+                        // var optKeys = [];
+                        // var optValues= [];
+                        var optDatas=[]
+                        data.map(item => {
+                            optDatas.push({
+                                name:item.categoryname,
+                                value:item.appcount
+                            })
+                            // optKeys.push(item.categoryname);
+                            // optValues.push(item.appcount)
+                        })
+                        this.initEchartsDonut(optDatas,echartsEl);
+                    }
+                })
+            },
+            countObjApi(){
+                var platformName = localStorage.getItem('platformName');
+                ajax('/api/monitor/getDevelopApp','get', {platformName: this.platformName}, (res) => {
+                    if (res.code === 1) {
+                       this.countObj = res.data;
+                       let data = res.data;
+                        $('#appcount').html(format(data.appcount));
+                        $('#platformappcount').html(format(data.platformappcount));
+                        $('#cloudappcount').html(format(data.cloudappcount));
+                        $('#subscribecount').html(format(data.subscribecount));
+                        $('#keyappcount').html(format(data.keyappcount));
+                        $('#registercount').html(format(data.registercount));
+                        $('#companycount').html(format(data.companycount));
+                    }
+                })
+            },
+            chinaMapApi(chinaMap) {
+                var platformName = localStorage.getItem('platformName');
+                let pieces= [];
+                var mapData = [];
+                let pieces2= [
+                    {
+                        gt: 900000,
+                        label: "> 900000",
+                        color: "#780650"
+                    },
+                    {
+                        gte:500000,
+                        lte: 900000,
+                        label: "500000 - 900000",
+                        color: "#135200"
+                    },
+                    {
+                        gte:400000,
+                        lt: 500000,
+                        label: "400000 - 500000",
+                        color: "#006d75"
+                    },
+                    {
+                        gte:300000,
+                        lt: 400000,
+                        label: "300000 - 400000",
+                        color: "#389e0d"
+                    },
+                    {
+                        gte:200000,
+                        lt: 300000,
+                        label: "200000 - 300000",
+                        color: "#13c2c2"
+                    },
+                    {
+                        gte:150000,
+                        lt: 200000,
+                        label: "150000 - 200000",
+                        color: "#73d13d"
+                    },
+                    {
+                        gte:100000,
+                        lt: 150000,
+                        label: "100000 - 150000",
+                        color: "#5cdbd3"
+                    },
+                    {
+                        gte: 50000,
+                        lt:100000,
+                        label: "50000 - 100000",
+                        color: "#b7eb8f"
+                    },
+                    {
+                        gte: 10000,
+                        lt: 50000,
+                        label: "10000 - 50000",
+                        color: "#b5f5ec"
+                    },
+                    {
+                        lt:10000,
+                        label:'<10000',
+                        color: "#f6ffed"
+                    }
+                ];
+                ajax('/api/monitor/getRegionalCompanyCount','get', {platformName: this.platformName,levelCount:5}, (res) => {
+                    console.log(res, '777')
+                    if (res.code === 1) {
+                        var data = res.data.result;
+                        let pieceList = res.data.level;
+                        data.map(item => {
+                            mapData.push({
+                                name: item.regiontxt,
+                                code: item.regioncode,
+                                value: item.companycount
+                            })
+                        })
+                        console.log(pieceList)
+                        pieceList.map((item,index) => {
+                            let obj = {};
+                            obj.lt = item.lt;
+                            obj.gte = item.gte;
+                            obj.label = item.level;
+                            if (item.lt==null){
+                                obj.color = "#780650";
+                            }
+                            if (item.lt==0){
+                                obj.lt =item.gte;
+                                obj.gte=null;
+                                obj.color = "#f6ffed";
+                            }
+                            if (index==2){
+                                obj.color = "#b7eb8f";
+                            }
+                            if (index==3){
+                                obj.color = "#73d13d";
+                            }
+                            if (index==4){
+                                obj.color = "#006d75";
+                            }
+                            if (index==5){
+                                obj.color = "#135200";
+                            }
+
+                            pieces.push(obj)
+                        })
+
+                       if (data.length==0){
+                           pieces = pieces2;
+                       }
+                        this.initChinaMapEcharts(pieces,mapData,chinaMap);
+
+                    }
+                },(error)=>{
+                    
+                })
+            },
+            initEchartsDonut:function (optDatas,echartsEl){
+               const datas= [
+                    { value: 20, name: '供应链管理' },
+                    { value: 30, name: '仓储物流' },
+                    { value: 25, name: '安全生产' },
+                    { value: 25, name: '节能减排' },
+                    { value: 20, name: '质量管控' },
+                    { value: 35, name: '研发设计' },
+                    { value: 30, name: '生产制造' },
+                    { value: 40, name: '运维服务' },
+                    { value: 25, name: '运营管理' },
+                ];
+                let option = {
+                    color: ['#40C6FF', '#1FFFEE', '#3369FF', '#8340FF', '#DA54FF', '#FF9C46', '#FDF031', '#4DE364','#F27491'],
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{a} <br/>{b} : {c} ({d}%)',
+                    },
+                    toolbox: {
+                        show: true,
+                    },
+                    legend: {
+                        itemHeight: 6,
+                        itemWidth: 6,
+                        icon: "circle",
+                        orient: "vertical",
+                        top: "center",
+                        right: "25",
+                        textStyle: {
+                            align: "left",
+                            color: "#",
+                            verticalAlign: "middle",
+                            rich: {
+                                name: {
+                                    width:80,
+                                    fontSize: 12,
+                                },
+                                value: {
+                                    width:20,
+                                    align:"right",
+                                    fontFamily: "Medium",
+                                    fontSize: 12,
+                                },
+                                rate: {width:10,
+                                    align:"right",
+                                    fontSize: 12,
+                                },
+                            },
+                        },
+                        data: optDatas,
+                        // formatter: (name) => {
+                        //     if (datas.length) {
+                        //         const item = datas.filter((item) => item.name === name)[0];
+                        //         return `{name|${name}}`;
+                        //     }
+                        // },
+                    },
+                    series: [
+                        {
+                            name: '',
+                            type: 'pie',
+                            radius: [60, 70],
+                            labelLine: {
+                                normal: {
+                                    show:false,
+
+                                }
+
+                            },
+                            center: ['25%', '50%'],
+                            label: {
+                                normal: {
+                                    show:false,
+
+                                }
+                            },
+                            data: optDatas
+                        },
+                    ],
+                };
+                echartsEl.off('click') //图表渲染前销毁点击事件
+                echartsEl.on("click", function(params) {
+                    let platformName =  localStorage.getItem('platformName');
+                    let url = encodeURI("/detail.html?flag=true&dataType=17"+'&category='+params.name+"&platformName="+platformName);
+
+                    // if(!params.data.ename){
+                    //     alert('暂无' + params.name + '地图数据');
+                    //     // return;
+                    // }
+                    window.location.href = url;
+                    // window.location.href = "https://www.php.cn";
+                    console.log(params,url)
+                });
+                echartsEl.setOption(option)
+
+
+            },
+            initEcharts:function (optKeys,optValues,echartsEl,type){
+                let dataX = ['其他','家电','纺织','机械','电子','轻工','食品','石化化工','服务业','电力热力和燃气']; //名称
+                let dataY = [5000,3000,3800,2600,4000,2700,2000,3500,2750,1900]; //数据
+                let zoomShow = false;
+                // if (dataY.length > 14) {
+                //     zoomShow = true;
+                // } else {
+                //     zoomShow = false;
+                // }
+                const option = {
+                    backgroundColor: 'rbg(40,46,72)',
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow',
+                        },
+                    },
+                    grid: {
+                        top: '10%',
+                        right: '5%',
+                        left: '13%',
+                        bottom: '18%',
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: optKeys,
+                            axisLine: {
+                                lineStyle: {
+                                    color: 'rgba(66, 192, 255, .3)',
+                                },
+                            },
+                            axisLabel: {
+                                interval:0,
+                                margin: 10,
+                                color: '#05D5FF',
+                                textStyle: {
+                                    fontSize: 10,
+                                },
+                                rotate: '45',
+                            },
+                            axisTick: {//刻度
+                                show: false,
+                            },
+                        },
+                    ],
+                    yAxis: [
+                        {
+                            axisLabel: {
+                                padding: [3, 0, 0, 0],
+                                formatter: '{value}',
+                                color: 'rgba(95, 187, 235, 1)',
+                                textStyle: {
+                                    fontSize: 11,
+                                },
+                            },
+                            axisLine: {
+                                show: false
+                            },
+                            axisTick: {
+                                show: false
+                            },
+                            splitLine: {
+                                lineStyle: {
+                                    color: '#323547',
+                                },
+                                show: true //隐藏
+                            },
+                        },
+                    ],
+                    dataZoom: [//滚动条
+                        {
+                            show: zoomShow,
+                            type: 'slider',
+                            realtime: true,
+                            startValue: 0,
+                            endValue: 14,
+                            xAxisIndex: [0],
+                            bottom: '10',
+                            left: '30',
+                            height: 10,
+                            borderColor: 'rgba(0,0,0,0)',
+                            textStyle: {
+                                color: '#05D5FF',
+                            },
+                        },
+                    ],
+                    series: [
+                        {
+                            type: 'bar',
+                            data: optValues,
+                            barWidth: '10',
+                            itemStyle: {
+                                normal: {
+                                    //这里设置柱形图圆角 [左上角，右上角，右下角，左下角]
+                                    barBorderRadius:[10, 10, 0, 0],
+                                    color: new echarts.graphic.LinearGradient(
+                                        0,
+                                        0,
+                                        0,
+                                        1,
+                                        [
+                                            {
+                                                offset: 0,
+                                                color: 'rgba(5, 213, 255, 0.8)', // 0% 处的颜色
+                                            },
+                                            {
+                                                offset: 0.98,
+                                                color: 'rgba(5, 213, 255, 0.2)', // 100% 处的颜色
+                                            },
+                                        ],
+                                        false
+                                    ),
+                                    shadowColor: 'rgba(5, 213, 255, 1)',
+                                    shadowBlur: 4,
+                                },
+                            },
+                            label: {
+                                normal: {
+                                    show: false,
+                                    lineHeight: 10,
+                                    formatter: '{c}',
+                                    position: 'top',
+                                    textStyle: {
+                                        color: '#fff',
+                                        fontSize: 10,
+                                    },
+                                },
+                            },
+                        },
+                    ],
+                };
+                echartsEl.off('click') //图表渲染前销毁点击事件
+                echartsEl.on("click", function(params) {
+                    let platformName =  decodeURI(localStorage.getItem('platformName'));
+                    let url = "";
+                    if (type==1){
+                        url = encodeURI("/detail.html?flag=true&dataType=16"+'&category='+params.name+"&platformName="+platformName);
+                    }else {
+                        url = encodeURI("/detail.html?flag=true&dataType=15"+'&category='+params.name+"&platformName="+platformName);
+                    }
+                    // if(!params.data.ename){
+                    //     alert('暂无' + params.name + '地图数据');
+                    //     // return;
+                    // }
+                    window.location.href = url;
+                    // window.location.href = "https://www.php.cn";
+                    console.log(params,platformName)
+                });
+                echartsEl.setOption(option)
+            },
+            initLineEcharts:function (optKeys,optValues1,optValues2,echartsEl){
+                let xData = ["10:01", "10:02", "10:03", "10:04","10:05","10:06"];
+                let legendData = ["开发者用户", "日活用户"]; //图例
+                let firstIndustry = [72, 37, 4, 75,18,49]; //第一产业
+                let thirdIndustry = [8, 15, 34, 31,7,42]; //第三产业
+                let option = {
+                    // backgroundColor:"#061740",
+                    grid: {
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 0,
+                        top: '10%',
+                        left: '3%',
+                        right: '3%',
+                        bottom: '5%',
+                        containLabel: true,
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            crossStyle: {
+                                color: '#999'
+                            }
+                        }
+                    },
+                    legend: {
+                        // orient: 'vertical',
+                        right: '0',
+                        icon:'circle',
+                        itemHeight:12,
+                        itemWidth: 12,
+                        data: legendData,
+                        //图例滚动
+                        // type: 'scroll',
+                        //图例文字样式
+                        textStyle: {
+                            color: 'rgba(36, 173, 254, 1)',
+                            fontSize:"1rem"
+                        }
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            axisTick: {
+                                show: false,
+                            },
+                            interval: 1,
+                            axisLabel: {
+                                color: 'rgba(36, 173, 254, 1)',
+                                fontSize:"12",
+                                rotate: '45',
+                            },
+                            axisLine: {
+                                show: false
+                            },
+                            data: optKeys,
+                        }
+                    ],
+                    yAxis: [
+
+                        {
+                            type: 'value',
+                            name: '',
+                            axisLabel: {
+                                formatter: '{value}'
+                            },
+                            axisLabel: {
+                                textStyle: {
+                                    //坐标轴颜色
+                                    color: 'rgba(36, 173, 254, 1)',
+                                    fontSize:"1rem"
+                                }
+                            },
+                            axisTick: {
+                                //是否显示y轴刻度线
+                                show: false
+                            },
+                            axisLine: {
+                                //是否显示y轴线
+                                show: false
+                            },
+                            //坐标轴线样式
+                            splitLine: {
+                                show: true,
+                                lineStyle: {
+                                    type: 'solid',
+                                    color: 'rgba(36, 173, 254, 0.2)'
+                                }
+                            },
+                        }
+                    ],
+                    series: [
+                        {
+                            name: "开发者用户",
+                            data: optValues1,
+                            type: 'line',
+                            smooth: true, //true曲线; false折线
+                            itemStyle: {
+                                normal: {
+                                    color: '#24adfe', //改变折线点的颜色
+                                    lineStyle: {
+                                        color: '#24adfe', //改变折线颜色
+                                        type: 'solid'
+                                    }
+                                }
+                            }
+
+                        },
+                        {
+                            name: "日活用户",
+                            data: optValues2,
+                            type: 'line',
+                            smooth: true, //true曲线; false折线
+                            itemStyle: {
+                                normal: {
+                                    color: '#ffc600', //改变折线点的颜色
+                                    lineStyle: {
+                                        color: '#ffc600', //改变折线颜色
+                                        type: 'solid'
+                                    }
+                                }
+                            }
+
+                        }
+                    ]
+                };
+                echartsEl.off('click') //图表渲染前销毁点击事件
+                echartsEl.on("click", function(params) {
+                    let platformName =  localStorage.getItem('platformName');
+                    let url = encodeURI("/detail.html?flag=true&dataType=100"+'&category='+params.name+"&platformName="+platformName);
+                    console.log(params,url)
+                });
+                echartsEl.setOption(option)
+            },
+            initChinaMapEcharts: function (pieces,mapData,chinaMap) {
+
+                    //echart 配制option
+                    let options= {
+                        tooltip: {
+                            triggerOn: "mousemove",   //mousemove、click
+                            padding:8,
+                            borderWidth:1,
+                            borderColor:'#409eff',
+                            backgroundColor:'rgba(255,255,255,0.7)',
+                            textStyle:{
+                                color:'#000000',
+                                fontSize:13
+                            },
+                            formatter: function(e, t, n) {
+                                let data = e.data;
+                                //模拟数据
+                                data.specialImportant = Math.random()*1000 | 0;
+                                data.import = Math.random()*1000 | 0;
+                                data.compare = Math.random()*1000 | 0;
+                                data.common = Math.random()*1000 | 0;
+                                data.specail = Math.random()*1000 | 0;
+
+                                let context = `
+                                       <div>
+                                           <p><b style="font-size:15px;">${data.name}</b></p>
+                                            <p class="tooltip_style"><span class="tooltip_left">服务企业数：</span><span class="tooltip_right">${data.value}</span></p>
+                                            <p class="tooltip_style"><span class="tooltip_left">点击查看详情</span></p>
+
+                                           </div>`
+                                    return context;
+                            }
+                         },
+                    visualMap: {
+                    show:true,
+                    left: 15,
+                    bottom: 15,
+                    showLabel:true,
+                    pieces: pieces,
+                //设置字体颜色
+                textStyle: {
+                    color: '#ffffff'
+                }
+                },
+                geo: {
+                        map: "china",
+                        scaleLimit: {
+                        min: 1,
+                        max: 2
+                    },
+                    zoom: 1,
+                    top: 120,
+                    label: {
+                        normal: {
+                            show:true,
+                            fontSize: "14",
+                            color: "rgba(0,0,0,0.7)"
+                         }
+                    },
+                    itemStyle: {
+                        normal: {
+                            //shadowBlur: 50,
+                            //shadowColor: 'rgba(0, 0, 0, 0.2)',
+                            borderColor: "rgba(0, 0, 0, 0.2)"
+                        },
+                        emphasis: {
+                            areaColor: "#f2d5ad",
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0,
+                            borderWidth: 0
+                        }
+                    }
+                },
+                    series: [
+                        {
+                            name: "企业服务数",
+                            type: "map",
+                            geoIndex: 0,
+                            data:mapData
+                        }
+                    ]
+                };
+                    //echart data
+                // this.options.series[0]['data'] = dataList;
+                chinaMap.off('click') //图表渲染前销毁点击事件
+                chinaMap.on("click", function(params) {
+                    // if(!params.data.ename){
+                    //     alert('暂无' + params.name + '地图数据');
+                    //     // return;
+                    // }
+                    let platformName =  decodeURI(localStorage.getItem('platformName'));
+                    window.location.href = encodeURI("/detail.html?dataType=21&flag=true&pid=1"+'&name='+params.name+"&value="+params.value+"&platformName="+platformName);
+                    // window.location.href = "https://www.php.cn";
+                    console.log(params)
+                });
+                chinaMap.setOption(options);
+                // return options;
+
+
+            },
+            flushPage:function (name){
+                this.platformName = name;
+                this.initNewPage();
+            },
+            initNewPage:function (){
+                //调用各项汇总数据
+                this.countObjApi();
+                //直方图1
+                let histogram = echarts.init(document.getElementById("histogram"));
+                let histogram2 = echarts.init(document.getElementById("histogram2"));
+                this.histogramApi(histogram,1);
+                this.histogramApi(histogram2,2);
+                //环形图
+                let donut = echarts.init(document.getElementById("donut"));
+                this.donutApi(donut);
+
+                //折线图
+                let lineChart = echarts.init(document.getElementById("lineChart"));
+                this.lineApi(lineChart);
+
+                let chinaMapEl = document.getElementById("chinaMap");
+                let chinaMap = echarts.init(chinaMapEl);
+                console.log(chinaMap,"chinaMap")
+                //调用接口
+                this.chinaMapApi(chinaMap);
+                window.addEventListener('resize',function(){
+                    if(histogram._dom.offsetHeight>0){
+                        histogram.resize();
+                    }
+                    if(donut._dom.offsetHeight>0){
+                        donut.resize();
+                    }
+                    if(histogram2._dom.offsetHeight>0){
+                        histogram2.resize();
+                    }
+                    if(lineChart._dom.offsetHeight>0){
+                        lineChart.resize();
+                    }
+                    if(chinaMap._dom.offsetHeight>0){
+                        chinaMap.resize();
+                    }
+                })
+            },
+        },
+        mounted(){
+            this.initNewPage();
+        }
+    })
+
+
+</script>

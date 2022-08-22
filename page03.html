@@ -1,0 +1,642 @@
+<style type="text/css">
+    .a {
+        color: red;
+    }
+
+    .fill-h {
+        height: 100%;
+        min-height: 100%;
+        color: white !important;
+    }
+
+    .xpanel-wrapper-line1 {
+        height: 35%;
+    }
+
+    .xpanel-wrapper-line2 {
+        height: 20%;
+    }
+
+    .xpanel-wrapper-line3 {
+        height: 45%;
+    }
+
+    .xpanel-wrapper {
+        padding-bottom: 15px;
+        box-sizing: border-box;
+    }
+
+    .xpanel-wrapper-1 {
+        height: 100%;
+    }
+
+    .xpanel-wrapper-2 {
+        height: 50%;
+    }
+
+    .xpanel-wrapper-3 {
+        height: 33.33333%;
+    }
+
+    .xpanel {
+        padding: 15px;
+        height: 100%;
+        min-height: 120px;
+        /*background:url("../img/panel.png") center no-repeat;*/
+        /*background-size:100% 100%;*/
+        /*box-sizing:border-box;*/
+    }
+
+    .xpanelx {
+        padding: 15px;
+        height: 100%;
+        min-height: 170px;
+        /*border: 1px solid rgba(64,198,255,0.2510);*/
+        /*background:url("../img/panel.png") center no-repeat;*/
+        /*background-size:100% 100%;*/
+        box-sizing: border-box;
+        border-radius: 6px;
+    }
+
+    .title-box span {
+        font-size: 18px;
+        color: #ffffff;
+        margin-left: 37px;
+    }
+
+    .title-box img {
+        width: 100%;
+        margin-top: -5px;
+    }
+
+    .title-box {
+        /*background: rebeccapurple;*/
+    }
+
+    .chart-box {
+        /*background: #2b542c;*/
+        display: flex;
+        flex-direction: column;
+    }
+
+    .count-panel {
+        height: 20%;
+        /*background: #2e6da4;*/
+    }
+
+    .histogram-panel {
+        /*background: #0f1c30;*/
+        height: 33%;
+    }
+
+    .donut-panel {
+        /*background: #8a6d3b;*/
+        height: 33%;
+    }
+
+    .reader-panel {
+        /*background: red;*/
+        height: 14%;
+    }
+
+    .count-content {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .count-content-num {
+        color: #40C6FF;
+    }
+
+    .count-content-name {
+        color: #ffffff;
+    }
+
+    .unit {
+        font-size: 14px;
+        color: #40C6FF;
+    }
+
+    .china-map-title {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: #fff;
+        font-size: 22px;
+        text-align: center;
+    }
+
+    .dpanel {
+        display: flex;
+        align-items: center;
+    }
+
+    .detail-title-box {
+        width: 500px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .title-text {
+        font-size: 22px;
+    }
+
+    .text-count {
+        padding-left: 60px;
+    }
+
+</style>
+<!-- 推荐使用此方式 如果使用 template 标签会报错 -->
+<script type="text/template" id="com03">
+    <!--    <div class="a"> {{a}}-->
+    <div class="row fill-h">
+        <div style="height: 10%">
+            <div class="fill-h dpanel">
+                <div class="detail-title-box">
+                    <div class="title-text">{{titleInfo.name}}</div>
+                    <!--                <div class="text-count">-->
+                    <!--                    <div class="count-content-num" style="font-size: 28px"> 672,521-->
+                    <!--                        <span class="unit">台</span>-->
+                    <!--                    </div>-->
+                    <!--                </div>-->
+                </div>
+            </div>
+        </div>
+        <div style="height: 85%;margin-bottom: 5%">
+            <div class="col-lg-6 fill-h">
+                <div class="xpanel-wrapper xpanel-wrapper-1">
+                    <div class="xpanel">
+
+                        <div class="title-box" style="height: 10%">
+                            <span>{{titleInfo.leftName}}</span>
+                            <img src="./img/header_long_bar.png" alt="">
+                        </div>
+                        <div style="height: 90%">
+                            <div class="fill-h" id="lineChartDetail"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 fill-h">
+                <div class="xpanel-wrapper xpanel-wrapper-1">
+
+                    <div class="xpanel">
+                        <div class="title-box" style="height: 10%">
+                            <span>{{titleInfo.rightName}}</span>
+                            <img src="./img/header_long_bar.png" alt="">
+                        </div>
+                        <div style="height: 90%">
+                            <div class="fill-h" id="histogram"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--    </div>-->
+
+    <!-- 这里面就可以使用 vue 的方式 -->
+</script>
+<script>
+    // 在主文件的 components 变量中赋值给 parents 属性，是为了按需加载及防止2次加载
+    components.page03 = Vue.extend({ // Vue.extend 的方式最好，Vue.components 的方式也是会报错
+        template: '#com03', // 此 id 对象 script模版的 id
+        data: function () {  // 此后面的写法跟vue组件的写法一模一样，
+            return {
+                a: '啊啊啊',
+                histogram: undefined,
+                params: {
+                    category: '',
+                    dataType: '',
+                    platformName: ''
+                },
+                titleInfo: {
+                    name: 'test',
+                    leftName: "按每日展示近12天数据",
+                    rightName: "按平台名称展示",
+                }
+
+            }
+        },
+        methods: {
+            initEcharts: function (optKeys, optValues, echartsEl) {
+                var data = [5000, 3000, 3800, 2600, 4000, 2700, 2000, 3500, 2750, 1900];
+                var className = ['其他', '家电', '纺织', '机械', '电子', '轻工', '食品', '石化化工', '服务业', '电力热力和燃气'];
+                var colorList = ['#39B3FF', '#47E0E0', '#7891D9', '#83D978', '#C7A530', '#FF8439'];
+                var defaultData = [100, 100, 100, 100, 100, 100];
+                let option = {
+                    // legend:{
+                    //   data:['完成率'],
+                    //   icon:'circle',
+                    //   bottom:10,
+                    //   textStyle:{
+                    //       color:'#ffffff'
+                    //   }
+                    // },
+                    grid: {
+                        left: '5%',
+                        right: '5%',
+                        bottom: '3%',
+                        top: '3%',
+                        containLabel: true
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'
+                        },
+                        formatter: function (params) {
+                            return params[0].name + '<br/>' +
+                                "<span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:rgba(36,207,233,0.9)'></span>" +
+                                // params[0].seriesName + ' : ' + Number((params[0].value.toFixed(4) / 10000).toFixed(2)).toLocaleString() + ' <br/>'
+                                params[0].seriesName + ' : ' + params[0].value
+                        }
+                    },
+                    // backgroundColor: 'rgb(20,28,52)',
+                    xAxis: {
+                        type: 'value',
+                        axisLine: {
+                            //x轴线
+                            show: false
+                        },
+                        splitLine: {
+                            show: false
+                        },
+                        axisLabel: {
+                            textStyle: {
+                                color: '#ffffff',
+                                fontSize: '12'
+                            },
+                            // formatter: function(value) {
+                            //         return value + ' %';
+                            // },
+                        },
+                    },
+                    yAxis: [{
+                        type: 'category',
+                        inverse: true,
+                        axisLabel: {
+                            show: true,
+                            textStyle: {
+                                color: '#fff'
+                            },
+                        },
+                        splitLine: {
+                            show: false
+                        },
+                        axisTick: {
+                            show: false
+                        },
+                        axisLine: {
+                            show: true
+                        },
+                        data: optKeys
+                    },
+                        //     {
+                        //     type: 'category',
+                        //     inverse: true,
+                        //     axisTick: 'none',
+                        //     axisLine: 'none',
+                        //     show: true,
+                        //     axisLabel: {
+                        //         textStyle: {
+                        //             color: '#ffffff',
+                        //             fontSize: '12'
+                        //         },
+                        //         // formatter: function(value) {
+                        //         //         return value + ' %';
+                        //         // },
+                        //     },
+                        //     data: data
+                        // }
+                    ],
+                    series: [{
+                        name: '数值',
+                        type: 'bar',
+                        zlevel: 1,
+                        itemStyle: {
+                            normal: {
+                                barBorderRadius: [0, 10, 10, 0],
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{
+                                    offset: 0,
+                                    color: 'rgb(57,89,255,1)'
+                                }, {
+                                    offset: 1,
+                                    color: 'rgb(46,200,207,1)'
+                                }]),
+                                //                 color: (params) => {
+                                // 	return colorList[params.dataIndex]
+                                // }
+                            },
+                        },
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'right',
+                                color: '#ffffff',
+                                fontSize: 12,
+                            },
+                        },
+                        barWidth: 20,
+                        data: optValues
+                    }
+                    ]
+                };
+                echartsEl.setOption(option)
+                // return  option;
+            },
+            initLineEchartsDetail: function (optKeys, optValues, echartsEl) {
+                let xData = ["10:01", "10:02", "10:03", "10:04", "10:05", "10:06"];
+                let legendData = ["开发者用户", "日活用户"]; //图例
+                let firstIndustry = [72, 37, 4, 75, 18, 49]; //第一产业
+                let thirdIndustry = [8, 15, 34, 31, 7, 42]; //第三产业
+                let option = {
+                    // backgroundColor:"#061740",
+                    grid: {
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 0,
+                        top: '3%',
+                        left: '3%',
+                        right: '3%',
+                        bottom: '3%',
+                        containLabel: true,
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            crossStyle: {
+                                color: '#999'
+                            }
+                        }
+                    },
+                    legend: {
+                        // orient: 'vertical',
+                        right: '0',
+                        icon: 'circle',
+                        itemHeight: 10,
+                        itemWidth: 10,
+                        data: legendData,
+                        //图例滚动
+                        // type: 'scroll',
+                        //图例文字样式
+                        textStyle: {
+                            color: 'rgba(255, 255, 255, 0.85)',
+                            fontSize: "12"
+                        }
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            axisTick: {
+                                show: false,
+                            },
+                            // interval: 1,
+                            axisLabel: {
+                                color: 'rgba(255, 255, 255, 0.8)',
+                                fontSize: "12",
+                                rotate: '20',
+                            },
+                            axisLine: {
+                                show: false
+                            },
+                            data: optKeys,
+                        }
+                    ],
+                    yAxis: [
+
+                        {
+                            type: 'value',
+                            name: '',
+                            // min: 0,
+                            // max: 100,
+                            // interval: 20,
+                            axisLabel: {
+                                formatter: '{value}'
+                            },
+                            axisLabel: {
+                                textStyle: {
+                                    //坐标轴颜色
+                                    color: 'rgba(255, 255, 255, 0.8)',
+                                    fontSize: "12"
+                                }
+                            },
+                            axisTick: {
+                                //是否显示y轴刻度线
+                                show: false
+                            },
+                            axisLine: {
+                                //是否显示y轴线
+                                show: false
+                            },
+                            //坐标轴线样式
+                            splitLine: {
+                                show: true,
+                                lineStyle: {
+                                    type: 'solid',
+                                    color: 'rgba(36, 173, 254, 0.2)'
+                                }
+                            },
+                        }
+                    ],
+                    series: [
+                        {
+                            name: "",
+                            data: optValues,
+                            type: 'line',
+                            smooth: true, //true曲线; false折线
+                            itemStyle: {
+                                normal: {
+                                    color: '#24adfe', //改变折线点的颜色
+                                    lineStyle: {
+                                        color: '#24adfe', //改变折线颜色
+                                        type: 'solid'
+                                    }
+                                }
+                            }
+
+                        },
+                        // {
+                        //     name: "",
+                        //     data: optValues,
+                        //     type: 'line',
+                        //     smooth: true, //true曲线; false折线
+                        //     itemStyle: {
+                        //         normal: {
+                        //             color: '#ffc600', //改变折线点的颜色
+                        //             lineStyle: {
+                        //                 color: '#ffc600', //改变折线颜色
+                        //                 type: 'solid'
+                        //             }
+                        //         }
+                        //     }
+                        //
+                        // }
+                    ]
+                };
+                console.log(optValues)
+                echartsEl.setOption(option)
+                // return option;
+            },
+            lineDataApi(echartsEl) {
+                let platformName = "";
+                if (this.params.platformName!="null"){
+                    platformName = this.params.platformName;
+                }
+                ajax('/api/monitorSecondary/getCommonSelectByDate', 'get', {
+                    category: this.params.category,
+                    dataType: this.params.dataType,
+                    platformName: platformName
+                }, (res) => {
+                    if (res.code === 1) {
+                        var data = res.data;
+                        var optKeys = [];
+                        var optValues = [];
+                        data.map(item => {
+                            optKeys.push(item.date);
+                            optValues.push(item.sum)
+                        })
+                        this.initLineEchartsDetail(optKeys, optValues, echartsEl);
+                    }
+                })
+            },
+            histogramApi(echartsEl) {
+                let platformName = "";
+                if (this.params.platformName!="null"){
+                    platformName = this.params.platformName;
+                }
+                ajax('/api/monitorSecondary/getCommonSelectToday', 'get', {
+                    category: this.params.category,
+                    dataType: this.params.dataType,
+                    platformName: platformName
+                }, (res) => {
+                    if (res.code === 1) {
+                        var data = res.data;
+                        var optKeys = [];
+                        var optValues = [];
+                        data.map(item => {
+                            optKeys.push(item.category);
+                            optValues.push(item.sum)
+                        })
+                        console.log(optKeys, 'optData')
+                        this.initEcharts(optKeys, optValues, echartsEl);
+                    }
+                })
+            },
+            getParams() {
+                let href = decodeURI(window.location.href)
+                let query = href.substring(href.indexOf('?') + 1);
+                let vars = query.split("&");
+                let obj = {}
+                for (var i = 0; i < vars.length; i++) {
+                    let pair = vars[i].split("=");
+                    obj[pair[0]] = pair[1]
+                }
+                return obj;
+            },
+            getTitle(params) {
+                let obj = {};
+                switch (params.dataType) {
+                    case '1':
+                        obj.name = "工业APP数量";
+                        break;
+                    case '2':
+                        obj.name = "基于平台开发APP数量";
+                        break;
+                    case '3':
+                        obj.name = "传统软件云化APP数量";
+                        break;
+                    case '4':
+                        obj.name = "工业APP订阅数量";
+                        break;
+                    case '5':
+                        obj.name = "杀手锏APP订阅数量";
+                        break;
+                    case '6':
+                        obj.name = "注册用户数量";
+                        break;
+                    case '7':
+                        obj.name = "服务企业总数";
+                        break;
+                    case '8':
+                        obj.name = "设备连接总数";
+                        break;
+                    case '9':
+                        obj.name = "日均运行设备数";
+                        break;
+                    case '10':
+                        obj.name = "实际用云量";
+                        break;
+                    case '11':
+                        obj.name = "数据总量";
+                        break;
+                    case '12':
+                        obj.name = "工业模型数";
+                        break;
+                    case '13':
+                        obj.name = "微服务数";
+                        break;
+                    case '14':
+                        obj.name = "调用次数";
+                        break;
+                    case '15':
+                        obj.name = "服务企业总数-"+params.category+"行业";
+                        break;
+                    case '16':
+                        obj.name = "工业APP-"+params.category+"分类";
+                        break;
+                    case '17':
+                        obj.name = "工业APP-"+params.category+"分类";
+                        break;
+                    case '18':
+                        obj.name = "平台设备设备连接数量-"+params.category+"分类";
+                        break;
+                    case '19':
+                        obj.name = "设备日均运行量-"+params.category+"分类";
+                        break;
+                    case '20':
+                        obj.name = "工业模型数量-"+params.category+"分类";
+                        break;
+
+                    default:
+                        obj.name = "";
+                }
+                this.titleInfo.name = obj.name;
+                // return obj;
+            }
+        },
+        mounted() {
+            this.params = this.getParams();
+            this.getTitle(this.params);
+            //直方图1
+            let histogram = echarts.init(document.getElementById("histogram"));
+            this.histogramApi(histogram);
+
+            //折线图
+            let lineChart = echarts.init(document.getElementById("lineChartDetail"));
+            // const lineChartOpt =this.initLineEchartsDetail();
+            // lineChart.setOption(lineChartOpt);
+            this.lineDataApi(lineChart);
+
+            window.addEventListener('resize', function () {
+                if (histogram._dom.offsetHeight > 0) {
+                    histogram.resize();
+                }
+
+                if (lineChart._dom.offsetHeight > 0) {
+                    lineChart.resize();
+                }
+            })
+        }
+    })
+
+
+</script>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8" />
+	    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+		<title>工业互联网平台运行监测</title>
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/app.css" />
+	</head>
+	
+	<body class="bg01">
+	<div id="app">
+
+		<header class="header">
+			<h3>工业互联网平台运行监测</h3>
+			<span>{{dateStr}}</span>
+		</header>
+		<div class="menus">
+			<button class="my-btn" v-bind:class="{isSelect:!flag}" @click="test(false)">平台模型指标</button>
+			<button class="my-btn" v-bind:class="{isSelect:flag}" @click="test(true)">开发应用指标</button>
+			<select class="my-select" v-model="platValue" @change="platChange">
+				<option value="all">全部</option>
+				<option v-for="(item, index) in platData" :key="index" :value="item">{{item}}</option>
+			</select>
+		</div>
+		<div class="wrapper">
+			<div class="container-fluid">
+				<page01 v-if="flag"></page01>
+				<page02 v-if="!flag"></page02>
+			</div>
+		</div>
+	</div>
+
+
+		<script type="text/javascript" src="js/remUtil.js"></script>
+		<script type="text/javascript" src="js/vue.js"></script>
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="js/echarts-3.8.5.min.js"></script>
+		<script type="text/javascript" src="js/echarts-map-world.js"></script>
+		<script type="text/javascript" src="js/echarts-map-china.js"></script>
+		<script type="text/javascript" src="js/echarts-china-provinces/jiangsu.js"></script>
+		<script type="text/javascript" src="js/echarts-china-cities/jiang1_su1_su1_zhou1.js"></script>
+		<script type="text/javascript" src="js/echarts-china-counties/jiang1su1_su1zhou1_kun1shan1shi4.js"></script>
+	<script>
+		// 定义了全局变量，用于存放组件
+		var components = {};
+		// 封装了此方法，同步的请求了 .html 文件的内容，注意：不能使用异步请求
+		function load(a){
+			for(var i=0;i<a.length;a++){
+				$.ajax({
+					url: a[i],
+					async: false,
+					success: function(res){
+						// 在body下插入获取到 .html 文件的内容，浏览器会自动解析html标签
+						$('body').append(res);
+					}
+				})
+			}
+		}
+		// 此封装的核心价值为按需加载，我不会一开始将所有组件都加载进来，但是加载进来的组件，我们就可以不用进行加载
+		// 具体的判断方式，判断 components 的全局变量，如果有这个组件，就可以不调用这个方法
+		// load(['./07.html','./01.html','./page01.html','./page02.html'])
+		// load(['./01.html'])
+		load(['./page01.html'])
+		load(['./page02.html'])
+		new Vue({
+			el: '#app', // 这个是主组件，也是父组件
+			data: function(){
+				return {
+					flag:false,
+					dateStr: '',
+					platData: [],
+					platValue: 'all'
+				}
+			},
+			components: {
+				// 如果组件的名称为驼峰式命名法，组件名称要用 - 隔开 如 tabList 标签名为 <tab-list>
+				// 'parent':components.parents, // 子组件
+				// 'app1':components.app1, // 子组件
+				'page01':components.page01,
+				'page02':components.page02
+			},
+			mounted () {
+				localStorage.setItem('platformName', '');
+				this.getLocalTime();
+				this.getPlatData();
+				window.addEventListener('beforeunload', () => {
+					localStorage.clear();
+				})
+			},
+			// destroyed() {
+			// 	localStorage.clear();
+			// },
+			methods:{
+				getPlatData() {
+					ajax('/api/monitorSecondary/getPlatformList', 'get', {}, (res) => {
+						console.log(res, 333)
+						if (res.code === 1) {
+							this.platData = res.data;
+						}
+					})
+				},
+				test:function (flag){
+					this.flag=flag
+				},
+				platChange(e) {
+					var str;
+					if (this.platValue === 'all') {
+						str = '';
+					} else {
+						str = this.platValue;
+					}
+					localStorage.setItem('platformName', str)
+					if(this.flag){
+						components.page01.options.methods.flushPage(str);
+					}else{
+						components.page02.options.methods.renderPage();
+					}
+					// location.reload();
+
+					// components.page02.options.data.platformName = this.platValue;
+				},
+				getLocalTime() {
+					var date = new Date();
+					var year = date.getFullYear();
+					var month = date.getMonth() + 1;
+					var day = date.getDate();
+					this.dateStr = year + '年' + month + '月' + day + '日'
+				}
+			}
+		})
+	</script>
+
+	<script type="text/javascript">
+			$(function() {
+				/********** 浏览器窗口改变时，重置报表大小 ****************/
+				window.onresize = function() {
+				}
+			});
+		</script>
+	</body>
+</html>

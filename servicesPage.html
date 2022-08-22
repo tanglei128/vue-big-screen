@@ -1,0 +1,372 @@
+<style type="text/css">
+    .a{
+        color: red;
+    }
+    .fill-h {height:100%;min-height:100%;color: white !important;}
+    .xpanel-wrapper-line1 {height:35%;}
+    .xpanel-wrapper-line2 {height:20%;}
+    .xpanel-wrapper-line3 {height:45%;}
+    .xpanel-wrapper {padding-bottom:15px;box-sizing:border-box;}
+    .xpanel-wrapper-1 {height:100%;}
+    .xpanel-wrapper-2 {height:50%;}
+    .xpanel-wrapper-3 {height:33.33333%;}
+    .xpanel {
+        padding:15px;
+        height:100%;
+        min-height:120px;
+        /*background:url("../img/panel.png") center no-repeat;*/
+        /*background-size:100% 100%;*/
+        /*box-sizing:border-box;*/
+    }
+    .xpanelx {
+        padding:15px;
+        height:100%;
+        min-height:170px;
+        /*border: 1px solid rgba(64,198,255,0.2510);*/
+        /*background:url("../img/panel.png") center no-repeat;*/
+        /*background-size:100% 100%;*/
+        box-sizing:border-box;
+        border-radius: 6px;
+    }
+    .title-box span{
+        font-size: 18px;
+        color: #ffffff;
+        margin-left: 37px;
+    }
+    .title-box img{
+        width: 100%;
+        margin-top: -5px;
+    }
+    .title-box{
+        /*background: rebeccapurple;*/
+    }
+    .chart-box{
+        /*background: #2b542c;*/
+       display: flex;
+       flex-direction: column;
+    }
+    .count-panel{
+        height: 20%;
+/*background: #2e6da4;*/
+    }
+    .histogram-panel{
+/*background: #0f1c30;*/
+        height: 33%;
+    }
+    .donut-panel{
+/*background: #8a6d3b;*/
+        height: 33%;
+    }
+    .reader-panel{
+        /*background: red;*/
+        height: 14%;
+    }
+    .count-content{
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .count-content-num{
+        color: #40C6FF;
+    }
+    .count-content-name{
+        color: #ffffff;
+    }
+    .unit{
+        font-size: 14px;
+        color: #40C6FF;
+    }
+    .china-map-title{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: #fff;
+        font-size: 22px;
+        text-align: center;
+    }
+    .dpanel{
+        display: flex;
+        align-items: center;
+    }
+    .detail-title-box{
+        width: 580px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+    .title-text{
+        font-size: 22px;
+    }
+    .text-count{
+       padding-left: 60px;
+    }
+
+</style>
+<!-- 推荐使用此方式 如果使用 template 标签会报错 -->
+<script type="text/template" id="com04">
+<!--    <div class="a"> {{a}}-->
+<div class="row fill-h">
+    <div style="height: 10%">
+        <div class="fill-h dpanel" >
+            <div class="detail-title-box">
+                <div class="title-text">{{ source === 1 ? '服务企业总数' : '区域设备总数'}} — {{params.name}}区域统计排行</div>
+                <div class="text-count">
+                    <div class="count-content-num" style="font-size: 28px"> {{params.value}}
+                        <span class="unit">{{source === 1 ? '家' : '台'}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="height: 85%;margin-bottom: 5%">
+<!--        <div class="col-lg-6 fill-h">-->
+<!--            <div class="xpanel-wrapper xpanel-wrapper-1">-->
+<!--                <div class="xpanel">-->
+
+<!--                    <div class="title-box" style="height: 10%">-->
+<!--                        <span>开发者用户</span>-->
+<!--                        <img src="./img/header_long_bar.png" alt="">-->
+<!--                    </div>-->
+<!--                    <div style="height: 90%">-->
+<!--                        <div class="fill-h" id="lineChartDetail"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+        <div class="col-lg-offset-2 col-lg-8 fill-h">
+            <div class="xpanel-wrapper xpanel-wrapper-1">
+
+                <div class="xpanel">
+                    <div class="title-box" style="height: 10%">
+                        <span>{{source === 1 ? '平台服务企业数' : '平台设备连接数'}}</span>
+                        <img src="./img/header_long_bar.png" alt="">
+                    </div>
+                    <div style="height: 90%">
+                        <div class="fill-h" id="histogram"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--    </div>-->
+
+    <!-- 这里面就可以使用 vue 的方式 -->
+</script>
+<script src="./js/request.js"></script>
+<script>
+    // 在主文件的 components 变量中赋值给 parents 属性，是为了按需加载及防止2次加载
+    components.servicesPage = Vue.extend({ // Vue.extend 的方式最好，Vue.components 的方式也是会报错
+        template: '#com04', // 此 id 对象 script模版的 id
+        data: function(){  // 此后面的写法跟vue组件的写法一模一样，
+            return {
+                a: '啊啊啊',
+                histogram:undefined,
+                source: '',
+                params:{
+                    name:'',
+                    value:0
+                },
+
+            }
+        },
+        methods:{
+            companyCountApi(echartsEl) {
+                let platformName = "";
+                if (this.params.platformName!="null"){
+                    platformName = this.params.platformName;
+                }
+                ajax('/api/monitorSecondary/getCommonSelectToday','get', {category:this.params.name,dataType:this.params.dataType,platformName:platformName}, (res) => {
+                    if (res.code === 1) {
+                        var data = res.data;
+                        var optKeys = [];
+                        var optValues= [];
+                        data.map(item => {
+                            optKeys.push(item.category);
+                            optValues.push(item.sum)
+                        })
+                        console.log(optKeys, 'optData')
+                        this.initEcharts(optKeys,optValues,echartsEl);
+                    }
+                })
+            },
+            getParams(){
+                let href = decodeURI(window.location.href)
+                let query = href.substring(href.indexOf('?')+1);
+                let vars = query.split("&");
+                let obj = {}
+                for (var i = 0; i < vars.length; i++) {
+                    let pair = vars[i].split("=");
+                    obj[pair[0]] = pair[1]
+                }
+                return obj;
+            },
+            initEcharts:function (optKeys,optValues,echartsEl){
+                var data=[5000,3000,3800,2600,4000,2700,2000,3500,2750,1900];
+                var className=['其他','家电','纺织','机械','电子','轻工','食品','石化化工','服务业','电力热力和燃气'];
+                var colorList=['#39B3FF','#47E0E0','#7891D9','#83D978','#C7A530','#FF8439'];
+                var defaultData=[100,100,100,100,100,100];
+                let option = {
+                    // legend:{
+                    //   data:['完成率'],
+                    //   icon:'circle',
+                    //   bottom:10,
+                    //   textStyle:{
+                    //       color:'#ffffff'
+                    //   }
+                    // },
+                    grid: {
+                        left: '5%',
+                        right: '5%',
+                        bottom: '5%',
+                        top: '5%',
+                        containLabel: true
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'
+                        },
+                        formatter: function(params) {
+                            return params[0].name + '<br/>' +
+                                "<span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:rgba(36,207,233,0.9)'></span>" +
+                                // params[0].seriesName + ' : ' + Number((params[0].value.toFixed(4) / 10000).toFixed(2)).toLocaleString() + ' <br/>'
+                                params[0].seriesName + ' : ' + params[0].value
+                        }
+                    },
+                    // backgroundColor: 'rgb(20,28,52)',
+                    xAxis: {
+                        type: 'value',
+                        axisLine: {
+                            //x轴线
+                            show: false
+                        },
+                        splitLine: {
+                            show: false
+                        },
+                        axisLabel: {
+                            textStyle: {
+                                color: '#ffffff',
+                                fontSize: '12'
+                            },
+                            // formatter: function(value) {
+                            //         return value + ' %';
+                            // },
+                        },
+                    },
+                    yAxis: [{
+                        type: 'category',
+                        inverse: true,
+                        axisLabel: {
+                            show: true,
+                            textStyle: {
+                                //y坐标名称字体颜色
+                                color: '#ffffff',
+                                fontSize:14
+                            },
+                        },
+                        splitLine: {
+                            show: false
+                        },
+                        axisTick: {
+                            show: false
+                        },
+                        axisLine: {
+                            show: true,
+                        },
+                        // data: className
+                        data:optKeys
+                    },
+                    //     {
+                    //     type: 'category',
+                    //     inverse: true,
+                    //     axisTick: 'none',
+                    //     axisLine: 'none',
+                    //     show: true,
+                    //     axisLabel: {
+                    //         textStyle: {
+                    //             color: '#ffffff',
+                    //             fontSize: '12'
+                    //         },
+                    //         // formatter: function(value) {
+                    //         //         return value + ' %';
+                    //         // },
+                    //     },
+                    //     data: data
+                    // }
+                    ],
+                    series: [{
+                        name: '企业总数',
+                        type: 'bar',
+                        zlevel: 1,
+                        itemStyle: {
+                            normal: {
+                                barBorderRadius:[0, 10, 10, 0],
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{
+                                    offset: 0,
+                                    color: 'rgb(57,89,255,1)'
+                                }, {
+                                    offset: 1,
+                                    color: 'rgb(46,200,207,1)'
+                                }]),
+                                //                 color: (params) => {
+                                // 	return colorList[params.dataIndex]
+                                // }
+                            },
+                        },
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'right',
+                                color: '#ffffff',
+                                fontSize: 12,
+                            },
+                        },
+                        barWidth: 20,
+                        // data: data
+                        data:optValues
+                    }
+                    ]
+                };
+                echartsEl.setOption(option)
+                // return  option;
+            },
+        },
+        mounted(){
+            let params = this.getParams();
+            console.log(params,"ser")
+            this.params = params;
+            if (params.source === '2') {
+                this.source = 2;
+            } else {
+                this.source = 1;
+            }
+            //直方图1
+            let histogram = echarts.init(document.getElementById("histogram"));
+            this.companyCountApi(histogram)
+            // const histogramOpt =this.initEcharts();
+            // histogram.setOption(histogramOpt);
+
+            // //折线图
+            // let lineChart = echarts.init(document.getElementById("lineChartDetail"));
+            // const lineChartOpt =this.initLineEchartsDetail();
+            // lineChart.setOption(lineChartOpt);
+
+            window.addEventListener('resize',function(){
+                if(histogram._dom.offsetHeight>0){
+                    histogram.resize();
+                }
+
+                // if(lineChart._dom.offsetHeight>0){
+                //     lineChart.resize();
+                // }
+            })
+        }
+    })
+
+
+</script>

@@ -1,0 +1,904 @@
+<style type="text/css">
+    .a {
+        color: red;
+    }
+
+    .fill-h {
+        height: 100%;
+        min-height: 100%;
+        color: white !important;
+    }
+
+    .xpanel-set {
+        height: 100%;
+    }
+
+    .header-title {
+        width: 100%;
+    }
+
+    .header-title img {
+        width: 100%;
+    }
+
+    .header-title span {
+        width: 100%;
+        font-size: 18px;
+        color: #fff;
+        margin-left: 30px;
+    }
+
+    .page-right .plat-resource-container {
+        height: 25%;
+    }
+
+    .plat_resource {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        /* margin-top: 16px; */
+    }
+
+    .plat_resource_box {
+        overflow-y: auto;
+        color: #fff;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .plat_resource_box h1 {
+        color: #40C6FF;
+        font-size: 20px;
+        display: flex;
+        line-height: 20px;
+    }
+
+    .plat_resource_box h1 span {
+        padding-left: 5px;
+        font-size: 12px;
+        color: #40C6FF;
+    }
+    .plat_resource_box h1 a {
+        color: #40C6FF;
+    }
+
+    .plat-resource-model {
+        height: 50%;
+    }
+
+    .xpanel .app-count-box {
+        display: flex;
+        flex-direction: column;
+        /* margin-top: 40px; */
+    }
+
+    .app-count {
+        display: flex;
+        justify-content: center;
+    }
+
+    #echart1 {
+        width: 100%;
+        height: 200px;
+        margin-top: 42px;
+    }
+
+    #echart2 {
+        width: 100%;
+        height: 200px;
+        margin-top: 42px;
+    }
+
+    #echart3 {
+        width: 100%;
+        height: 160px;
+        /* margin-top: 40px; */
+    }
+
+    #map-echart {
+        width: 100%;
+        height: 710px;
+    }
+
+    .map-xpanel {
+        border: none;
+    }
+
+    .map-title {
+        color: #fff;
+        font-size: 22px;
+        text-align: center;
+        /* margin-top: 50px; */
+    }
+
+    .tip-box {
+        display: flex;
+        flex-direction: column;
+        min-width: 100px;
+        color: #fff;
+        /*padding: 0;*/
+        /*background: rgba(51,51,51,0.3100);*/
+    }
+    .xpanel .plat-flex{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 60%;
+    }
+    .plat-flex .plat_resource_box {
+        display: flex;
+        align-items: center;
+    }
+    .plat-flex .plat_resource_box h1 {
+        margin: 0;
+        padding-left: 15px;
+    }
+</style>
+<!-- 推荐使用此方式 如果使用 template 标签会报错 -->
+<script type="text/template" id="com01">
+    <!--    <div class="a"> {{a}}-->
+<div class="row fill-h">
+    <div class="col-lg-3 fill-h">
+        <div class="xpanel-wrapper xpanel-set">
+            <div class="xpanel">
+                <div class="header-title">
+                    <span>平台设备</span>
+                    <img src="./img/header_bar.png" alt="">
+                </div>
+                <div class="header-top">
+                    <div class="plat_resource app-count-box">
+                        <div class="app-count">
+                            <div class="plat_resource_box">
+                                <h1>
+                                    <a href="./detail.html?dataType=8" id="deviceConnections"></a>
+                                    <span>台</span>
+                                </h1>
+                                设备连接总数
+                            </div>
+                        </div>
+                    </div>
+                    <div class="echart-box" id="echart1">
+                    </div>
+                </div>
+                <div class="header-bottom">
+                    <div class="plat_resource app-count-box">
+                        <div class="app-count">
+                            <div class="plat_resource_box">
+                                <h1>
+                                    <!-- <a href="./detail.html?dataType=9">{{pageData.dailyRunDevices}}</a> -->
+                                    <a href="./detail.html?dataType=9" id="dailyRunDevices">{{pageData.dailyRunDevices}}</a>
+                                    <span>台</span>
+                                </h1>
+                                日均运行设备数
+                            </div>
+                        </div>
+                    </div>
+                    <div class="echart-box" id="echart2">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--        <div class="xpanel-wrapper xpanel-wrapper-2">-->
+        <!--            <div class="xpanel">-->
+        <!--                 世界地图-->
+        <!--            </div>-->
+        <!--        </div>-->
+    </div>
+    <!--        中间地图区域-->
+    <div class="col-lg-6 fill-h">
+        <div class="xpanel-wrapper xpanel-wrapper-1">
+            <div class="xpanel map-xpanel">
+                <div class="map-title">
+                    区域设备 — 中国
+                </div>
+                <div id="map-echart"></div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 fill-h page-right">
+        <div class="xpanel-wrapper xpanel-wrapper-3 plat-resource-container">
+            <div class="xpanel">
+                <div class="header-title">
+                    <span>平台资源</span>
+                    <img src="./img/header_bar.png" alt="">
+                </div>
+                <div class="plat_resource">
+                    <div class="plat_resource_box">
+                        <h1>
+                            <a href="./detail.html?dataType=10" id="cloudcount">{{pageData.platformModelQuota.cloudcount}}</a>
+
+                            <span>台</span>
+                        </h1>
+                        实际用云量
+                    </div>
+                    <div class="plat_resource_box">
+                        <h1>
+                            <a href="./detail.html?dataType=11" id="totaldatacount">{{pageData.platformModelQuota.totaldatacount}}</a>
+
+                            <span>TB</span>
+                        </h1>
+                        数据总量
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="xpanel-wrapper xpanel-wrapper-3 plat-resource-model">
+            <div class="xpanel">
+                <div class="header-title">
+                    <span>工业模型</span>
+                    <img src="./img/header_bar.png" alt="">
+                </div>
+                <div style="margin-top: 16px;" class="plat_resource app-count-box">
+                    <div class="app-count">
+                        <div class="plat_resource_box">
+                            <h1>
+                                <a href="./detail.html?dataType=12" id="industryModelCount">{{pageData.industryModelCount}}</a>
+                                <span>台</span>
+                            </h1>
+                            工业模型数
+                        </div>
+                    </div>
+                </div>
+                <div class="echart-box" id="echart3">
+                </div>
+
+            </div>
+        </div>
+        <div class="xpanel-wrapper xpanel-wrapper-3 plat-resource-container">
+            <div class="xpanel">
+                <div class="header-title">
+                    <span>平台微服务</span>
+                    <img src="./img/header_bar.png" alt="">
+                </div>
+                <div class="plat_resource plat-flex">
+                    <div class="plat_resource_box">
+                        微服务数
+                        <h1>
+                            <a href="./detail.html?dataType=13" id="microservicecount">{{pageData.platformModelQuota.microservicecount}}</a>
+                            <span>个</span>
+                        </h1>
+                    </div>
+                    <div class="plat_resource_box">
+                        调用次数
+                        <h1>
+                            <a href="./detail.html?dataType=14" id="callbackacount">{{pageData.platformModelQuota.callbackacount}}</a>
+                            <span>次</span>
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--    </div>-->
+
+<!-- 这里面就可以使用 vue 的方式 -->
+</script>
+<script src="./js/request.js"></script>
+<script src="./js/utils.js"></script>
+
+<script>
+    // import api from './js/api'
+    // 在主文件的 components 变量中赋值给 parents 属性，是为了按需加载及防止2次加载
+    components.page02 = Vue.extend({ // Vue.extend 的方式最好，Vue.components 的方式也是会报错
+        template: '#com01', // 此 id 对象 script模版的 id
+        data() {  // 此后面的写法跟vue组件的写法一模一样，
+            return {
+                a: '啊啊啊',
+                worldMap: undefined,
+                platformName: localStorage.getItem('platformName'),
+                pageData: {
+                    dailyRunDevices: 0,
+                    deviceConnections: 0,
+                    modelTotalNum: 0,
+                    industryModelCount: 0,
+                    platformModelQuota: {
+                        callbackacount: 0,
+                        cloudcount: 0,
+                        microservicecount: 0,
+                        totaldatacount: 0
+                    }
+                }
+            }
+        },
+        methods: {
+            equipmentTotal() {
+                var platformName = localStorage.getItem('platformName')
+                // console.log(this.platformName,'platformName')
+                ajax('/api/monitor/getDeviceConnections', 'get', { platformName: platformName }, (res) => {
+                    // console.log(res, '2222')
+                    if (res.code === 1) {
+                        var data = res.data;
+                        var xData = [];
+                        var yData = [];
+                        data.map(item => {
+                            xData.push(item.categoryname);
+                            yData.push(item.deviceconnections);
+                        })
+                        this.appNumInit(xData, yData, 1);
+                    }
+                })
+            },
+            equipmentRunTotal() {
+                var platformName = localStorage.getItem('platformName')
+                ajax('/api/monitor/getDailyRunDevices', 'get', { platformName: platformName }, (res) => {
+                    // console.log(res, '5555')
+                    if (res.code === 1) {
+                        var data = res.data;
+                        var xData = [];
+                        var yData = [];
+                        data.map(item => {
+                            xData.push(item.categoryname);
+                            yData.push(item.dailyrundevices);
+                        })
+                        this.appNumInit(xData, yData, 2);
+                    }
+                })
+            },
+            modelTotal() {
+                var platformName = localStorage.getItem('platformName')
+                console.log(platformName, 'platformName')
+                ajax('/api/monitor/getIndustryModelScales', 'get', { platformName: platformName }, (res) => {
+                    // console.log(res, '666')
+                    if (res.code === 1) {
+                        var data = res.data;
+                        var bingData = [];
+                        data.map(item => {
+                            bingData.push({
+                                name: item.categoryname,
+                                value: item.modelcount
+                            })
+                        })
+                        total = 0;
+                        this.initBing(bingData);
+                    }
+                })
+            },
+            areaEquipent() {
+                var platformName = localStorage.getItem('platformName')
+                ajax('/api/monitor/getRegionalEquipments', 'get', { platformName: platformName,levelCount:5 }, (res) => {
+                    // console.log(res, '777')
+                    if (res.code === 1) {
+                        var data = res.data.result;
+                        let pieceList = res.data.level;
+                        var mapData = [];
+                        let pieces = [];
+                        data.map(item => {
+                            mapData.push({
+                                name: item.regiontxt,
+                                code: item.regioncode,
+                                value: item.equipmentcount
+                            })
+                        })
+                        let  colorList = ["#780650",
+                            "#135200","#006d75",
+                            "#13c2c2","#73d13d",
+                            "#b7eb8f","#f6ffed"];
+
+                        pieceList.map((item,index) => {
+                            let obj = {};
+                            obj.lt = item.lt;
+                            obj.gte = item.gte;
+                            obj.label = item.level;
+                            if (item.lt==null){
+                                obj.color = "#780650";
+                            }
+                            if (item.lt==0){
+                                obj.lt =item.gte;
+                                obj.gte=null;
+                                obj.color = "#f6ffed";
+                            }
+                            if (index==2){
+                                obj.color = "#b7eb8f";
+                            }
+                            if (index==3){
+                                obj.color = "#73d13d";
+                            }
+                            if (index==4){
+                                obj.color = "#006d75";
+                            }
+                            if (index==5){
+                                obj.color = "#135200";
+                            }
+
+                            pieces.push(obj)
+                        })
+
+
+
+                        console.log(pieces,mapData);
+let pieces2 = [
+        {
+            gt: 4000000,
+            label: "> 4000000",
+            color: "#780650"
+        },
+        {
+            gte:3500000,
+            lte: 4000000,
+            label: "3500000 - 4000000",
+            color: "#135200"
+        },
+        {
+            gte:2500000,
+            lt: 3500000,
+            label: "2500000 - 3500000",
+            color: "#006d75"
+        },
+        {
+            gte:2000000,
+            lt: 2500000,
+            label: "2000000 - 2500000",
+            color: "#389e0d"
+        },
+        {
+            gte:1500000,
+            lt: 2000000,
+            label: "1500000 - 2000000",
+            color: "#13c2c2"
+        },
+        {
+            gte:1000000,
+            lt: 1500000,
+            label: "1000000 - 1500000",
+            color: "#73d13d"
+        },
+        {
+            gte:500000,
+            lt: 1000000,
+            label: "500000 - 1000000",
+            color: "#5cdbd3"
+        },
+        {
+            gte: 300000,
+            lt:500000,
+            label: "300000 - 500000",
+            color: "#b7eb8f"
+        },
+        {
+            gte: 100000,
+            lt: 300000,
+            label: "100000 - 300000",
+            color: "#b5f5ec"
+        },
+        {
+            lt:100000,
+            label:'<100000',
+            color: "#f6ffed"
+        }
+    ];
+                        // console.log(mapData, 'mapData')
+                        this.initEcharts(pieces,mapData);
+                    }
+                })
+            },
+            initEcharts(pieces,dataList) {
+                // console.log(dataList, 'dataList')
+                let options = {
+                    tooltip: {
+                        triggerOn: "mousemove",   //mousemove、click
+                        padding: 8,
+                        borderWidth: 1,
+                        borderColor: '#409eff',
+                        backgroundColor: 'rgba(51,51,51,0.3100)',
+                        textStyle: {
+                            color: '#000000',
+                            fontSize: 13
+                        },
+                        formatter: function (e, t, n) {
+                            let data = e.data;
+                            var cityName = data.name;
+                            var cityCount = format(data.value);
+                            let context = `
+                                       <div class="tip-box">
+                                        <span>${cityName}</span>
+                                        <span>${cityCount}</span>
+                                      </div>
+                                        `
+                            return context;
+                        }
+                    },
+                    visualMap: {
+                        show: true,
+                        left: 15,
+                        bottom: 20,
+                        showLabel: true,
+                        pieces: pieces,
+                        //设置字体颜色
+                        textStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    geo: {
+                        map: "china",
+                        scaleLimit: {
+                            min: 1,
+                            max: 2
+                        },
+                        zoom: 1,
+                        top: 120,
+                        label: {
+                            normal: {
+                                show: true,
+                                fontSize: "14",
+                                color: "rgba(0,0,0,0.7)"
+                            }
+                        },
+                        itemStyle: {
+                            normal: {
+                                //shadowBlur: 50,
+                                //shadowColor: 'rgba(0, 0, 0, 0.2)',
+                                borderColor: "rgba(0, 0, 0, 0.2)"
+                            },
+                            emphasis: {
+                                areaColor: "#f2d5ad",
+                                shadowOffsetX: 0,
+                                shadowOffsetY: 0,
+                                borderWidth: 0
+                            }
+                        }
+                    },
+                    series: [
+                        {
+                            name: "区域设备",
+                            type: "map",
+                            geoIndex: 0,
+                            data: dataList
+                        }
+                    ]
+                };
+                let chinaMap = echarts.init(document.getElementById("map-echart"));
+                // const chinaMapOpt =this.initEcharts(chinaMap);
+                let platformName =  decodeURI(localStorage.getItem('platformName'));
+                chinaMap.off('click') //图表渲染前销毁点击事件
+                chinaMap.on("click", function (params) {
+                    window.location.href = encodeURI("/detail.html?dataType=22&pid=1" + '&name=' + params.name + "&value=" + params.value + '&source=2'+"&platformName="+platformName);
+                    // window.location.href = "https://www.php.cn";
+                    console.log(params)
+                });
+                chinaMap.setOption(options);
+                // return options;
+            },
+            appNumInit(xData, yData, type) {
+                // var xData = ['其他', '家电', '纺织', '机械', '电子', '轻工', '食品']
+                // var yData = ['1000', '1500', '3000', '6000', '4200', '3800', '2400']
+                let zoomShow = false;
+                if (yData.length > 14) {
+                    zoomShow = true;
+                } else {
+                    zoomShow = false;
+                }
+                const option = {
+                    backgroundColor: 'rbg(40,46,72)',
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow',
+                        },
+                    },
+                    grid: {
+                        top: '5%',
+                        right: '10%',
+                        left: '18%',
+                        bottom: '20%',
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: xData,
+                            axisLine: {
+                                lineStyle: {
+                                    color: 'rgba(66, 192, 255, .3)',
+                                },
+                            },
+                            axisLabel: {
+                                interval: 0,
+                                margin: 10,
+                                color: '#05D5FF',
+                                textStyle: {
+                                    fontSize: 10,
+                                },
+                                rotate: '45',
+                            },
+                            axisTick: {//刻度
+                                show: false,
+                            },
+                        },
+                    ],
+                    yAxis: [
+                        {
+                            axisLabel: {
+                                padding: [3, 0, 0, 0],
+                                formatter: '{value}',
+                                color: 'rgba(95, 187, 235, 1)',
+                                textStyle: {
+                                    fontSize: 11,
+                                },
+                            },
+                            axisLine: {
+                                show: false
+                            },
+                            axisTick: {
+                                show: false
+                            },
+                            splitLine: {
+                                lineStyle: {
+                                    color: '#323547',
+                                },
+                                show: true //隐藏
+                            },
+                        },
+                    ],
+                    dataZoom: [//滚动条
+                        {
+                            show: zoomShow,
+                            type: 'slider',
+                            realtime: true,
+                            startValue: 0,
+                            endValue: 14,
+                            xAxisIndex: [0],
+                            bottom: '10',
+                            left: '30',
+                            height: 10,
+                            borderColor: 'rgba(0,0,0,0)',
+                            textStyle: {
+                                color: '#05D5FF',
+                            },
+                        },
+                    ],
+                    series: [
+
+                    ],
+                };
+                if (type === 1) {
+                    option.series[0] = {
+                        type: 'bar',
+                        data: yData,
+                        barWidth: '6',
+                        itemStyle: {
+                            normal: {
+                                //这里设置柱形图圆角 [左上角，右上角，右下角，左下角]
+                                barBorderRadius: [10, 10, 0, 0],
+                                color: new echarts.graphic.LinearGradient(
+                                    0,
+                                    0,
+                                    0,
+                                    1,
+                                    [
+                                        {
+                                            offset: 0,
+                                            color: '#40C6FF', // 0% 处的颜色
+                                        },
+                                        {
+                                            offset: 0.98,
+                                            color: '#59FFFF', // 100% 处的颜色
+                                        },
+                                    ],
+                                    false
+                                ),
+                                shadowColor: 'rgba(5, 213, 255, 1)',
+                                shadowBlur: 4,
+                            },
+                        },
+                        label: {
+                            normal: {
+                                //是否显示直方图顶部数字
+                                show: false,
+                                lineHeight: 10,
+                                formatter: '{c}',
+                                position: 'top',
+                                textStyle: {
+                                    color: '#fff',
+                                    fontSize: 10,
+                                },
+                            },
+                        },
+                    };
+                    var myChart = echarts.init(document.getElementById('echart1'));
+                    let platformName =  decodeURI(localStorage.getItem('platformName'));
+                    myChart.setOption(option);
+                    myChart.off('click') //图表渲染前销毁点击事件
+                    myChart.on("click", function (params) {
+                        console.log(params, 999)
+                        // ./detail.html?dataType=13
+                        window.location.href = encodeURI(`/detail.html?dataType=18&category=${params.name}&platformName=`+platformName);
+                        // window.location.href = "https://www.php.cn";
+                    });
+                } else {
+                    option.series[0] = {
+                        type: 'bar',
+                        data: yData,
+                        barWidth: '6',
+                        itemStyle: {
+                            normal: {
+                                //这里设置柱形图圆角 [左上角，右上角，右下角，左下角]
+                                barBorderRadius: [10, 10, 0, 0],
+                                color: new echarts.graphic.LinearGradient(
+                                    0,
+                                    0,
+                                    0,
+                                    1,
+                                    [
+                                        {
+                                            offset: 0,
+                                            color: '#4040FF', // 0% 处的颜色
+                                        },
+                                        {
+                                            offset: 0.98,
+                                            color: '#AC59FF', // 100% 处的颜色
+                                        },
+                                    ],
+                                    false
+                                ),
+                                shadowColor: 'rgba(5, 213, 255, 1)',
+                                shadowBlur: 4,
+                            },
+                        },
+                        label: {
+                            normal: {
+                                //是否显示顶端数字
+                                show: false,
+                                lineHeight: 10,
+                                formatter: '{c}',
+                                position: 'top',
+                                textStyle: {
+                                    color: '#fff',
+                                    fontSize: 10,
+                                },
+                            },
+                        },
+                    };
+                    let platformName =  decodeURI(localStorage.getItem('platformName'));
+                    var myChart2 = echarts.init(document.getElementById('echart2'));
+                    myChart2.setOption(option);
+                    myChart2.off('click') //图表渲染前销毁点击事件
+                    myChart2.on("click", function (params) {
+                        console.log(params, 999)
+                        // ./detail.html?dataType=13
+                        window.location.href = encodeURI(`/detail.html?dataType=19&category=${params.name}&platformName=${platformName}`);
+                        // window.location.href = "https://www.php.cn";
+                    });
+                }
+
+
+            },
+            initBing(datas) {
+                var option = {
+                    color: ["#F56463", "#00C6FF", "#F09615", "#0079E6"],
+                    legend: {
+                        itemHeight: 6,
+                        itemWidth: 6,
+                        icon: "circle",
+                        orient: "vertical",
+                        top: "center",
+                        right: "5%",
+                        textStyle: {
+                            align: "left",
+                            color: "#",
+                            verticalAlign: "middle",
+                            rich: {
+                                name: {
+                                    width: 80,
+                                    fontSize: 12,
+                                },
+                                value: {
+                                    width: 40,
+                                    align: "left",
+                                    fontFamily: "Medium",
+                                    fontSize: 12,
+                                    marginLeft: 5
+                                },
+                                rate: {
+                                    width: 10,
+                                    align: "right",
+                                    fontSize: 16,
+                                },
+                            },
+                        },
+                        data: datas,
+                        formatter: (name) => {
+                            if (datas.length) {
+                                const item = datas.filter((item) => item.name === name)[0];
+                                // console.log(item, 222)
+                                return `{name|${name}} {value| ${item.value}}`;
+                            }
+                        },
+                    },
+                    tooltip: {
+                        show: false
+                    },
+                    series: [
+                        {
+                            name: "",
+                            type: "pie",
+                            radius: ['70%', '80%'],
+                            center: ['28%', '50%'],
+                            avoidLabelOverlap: false,
+                            // roseType: "radius",
+                            label: {
+                                show: false,
+                                normal: {
+                                    show: false
+                                }
+                                // position: 'center'
+                            },
+                            emphasis: {
+                                label: {
+                                    show: false,
+                                    fontSize: '12',
+                                    fontWeight: 'bold'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: datas,
+                        },
+                    ],
+                };
+                let platformName =  decodeURI(localStorage.getItem('platformName'));
+                var myChart = echarts.init(document.getElementById('echart3'));
+                myChart.setOption(option);
+                myChart.off('click') //图表渲染前销毁点击事件
+                myChart.on("click", function (params) {
+                    // ./detail.html?dataType=13
+                    window.location.href = encodeURI(`/detail.html?dataType=20&category=${params.name}&platformName=${platformName}`);
+                    // window.location.href = "https://www.php.cn";
+                    console.log(params, 999)
+                });
+            },
+            getSourceData() {
+                var platformName = localStorage.getItem('platformName')
+                ajax('/api/monitor/getPlatformModel', 'get', { platformName: platformName }, (res) => {
+                    console.log(res, '8888')
+                    if (res.code === 1) {
+                        data = res.data;
+                        for (var key in data) {
+                            if (typeof data[key] === 'number') {
+                                data[key] = format(data[key])
+                            } else {
+                                data[key].callbackacount = format(data[key].callbackacount);
+                                data[key].cloudcount = format(data[key].cloudcount);
+                                data[key].microservicecount = format(data[key].microservicecount);
+                                data[key].totaldatacount = format(data[key].totaldatacount);
+                            }
+                        }
+                        
+                        $('#deviceConnections').html(data.deviceConnections);
+                        $('#dailyRunDevices').html(data.dailyRunDevices);
+                        $('#cloudcount').html(data.platformModelQuota.cloudcount);
+                        $('#totaldatacount').html(data.platformModelQuota.totaldatacount);
+                        $('#industryModelCount').html(data.industryModelCount);
+                        $('#microservicecount').html(data.platformModelQuota.microservicecount);
+                        $('#callbackacount').html(data.platformModelQuota.callbackacount);
+
+                        this.pageData = data;
+                    }
+                })
+            },
+            renderPage() {
+                this.equipmentTotal();
+                this.equipmentRunTotal();
+                this.modelTotal();
+                this.areaEquipent();
+                this.getSourceData()
+            }
+        },
+        mounted() {
+            this.renderPage()
+            // let chinaMap = echarts.init(document.getElementById("map-echart"));
+            // const chinaMapOpt =this.initEcharts(chinaMap);
+            // chinaMap.setOption(chinaMapOpt);
+            // var that=this;
+            //初始化echarts实例
+            // const worldMap = echarts.init(document.getElementById("echart3"));
+            // const worldMapOpt =this.initEcharts();
+            // worldMap.setOption(worldMapOpt);
+            window.addEventListener('resize', function () {
+                // worldMap.resize();
+
+            })
+        }
+    })
+</script>
